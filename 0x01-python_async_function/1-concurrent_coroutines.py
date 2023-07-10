@@ -9,9 +9,10 @@ of the delays should be in ascending order without using sort() because
 of concurrency."""
 
 import asyncio
-from typing import List
+from typing import List, Callable
 
-wait_random = __import__('0-basic_async_syntax').wait_random
+wait_random: Callable[[int], float] = __import__(
+                    '0-basic_async_syntax').wait_random
 
 
 async def wait_n(n: int, max_delay: int) -> List[float]:

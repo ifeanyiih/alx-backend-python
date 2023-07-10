@@ -23,5 +23,5 @@ async def wait_n(n: int, max_delay: int) -> List[float]:
     Returns:
         list: a list of float values
     """
-    rands = [await wait_random(max_delay) for i in range(n)]
+    rands = sorted(await asyncio.gather(*(wait_random(max_delay) for i in range(n))))
     return rands

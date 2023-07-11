@@ -11,6 +11,6 @@ async def async_generator() -> Iterator[float]:
     """A async generator function that takes no arg
     It yields the values
     """
-    for _ in range(10):
+    for i in range(10):
         await asyncio.sleep(1)
         yield uniform(0, 10)

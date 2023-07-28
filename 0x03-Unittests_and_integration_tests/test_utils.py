@@ -4,7 +4,8 @@ class that implements a method to test that
 utils.access_nested_map returns what it is supposed to
 """
 import unittest
-from utils import access_nested_map
+from unittest.mock import patch, Mock
+from utils import access_nested_map, requests, get_json
 from parameterized import parameterized
 
 
@@ -27,3 +28,20 @@ class TestAccessNestedMap(unittest.TestCase):
     def test_access_nested_map_exception(self, nested_map, path, expected):
         """tests that the right errors are raised"""
         self.assertRaises(expected, access_nested_map, nested_map, path)
+
+
+class TestGetJson(unittest.TestCase):
+    """A unittest test case"""
+    @parameterized.expand([
+        ("http://example.com", {"payload": True}),
+        ("http://holberton.io", {"payload": False})
+    ])
+    def test_get_json(self, url, payload):
+        """tests that utils.get_json returns the
+        expected result"""
+        with patch('requests.get') as requestGetMock:
+            mock = Mock()
+            mock.json.return_value = payload
+            requestGetMock.return_value = mock
+            self.assertEqual(get_json(url), payload)
+            requestGetMock.assert_called_once_with(url)

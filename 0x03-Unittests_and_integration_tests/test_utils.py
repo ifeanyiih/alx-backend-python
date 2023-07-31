@@ -5,7 +5,7 @@ utils.access_nested_map returns what it is supposed to
 """
 import unittest
 from unittest.mock import patch, Mock
-from utils import access_nested_map, requests, get_json
+from utils import access_nested_map, requests, get_json, memoize
 from parameterized import parameterized
 
 
@@ -45,3 +45,26 @@ class TestGetJson(unittest.TestCase):
             requestGetMock.return_value = mock
             self.assertEqual(get_json(url), payload)
             requestGetMock.assert_called_once_with(url)
+
+
+class TestMemoize(unittest.TestCase):
+    """A unittest test case"""
+    def test_memoize(self):
+        """test utils.memoize"""
+        class TestClass:
+            """A TestClass"""
+            def a_method(self):
+                """returns a constant"""
+                return 42
+
+            @memoize
+            def a_property(self):
+                return self.a_method()
+
+        with patch.object(TestClass, 'a_method') as mock:
+            mock.return_value = 42
+            inst = TestClass()
+            rel = inst.a_property
+            self.assertEqual(rel, inst.a_property)
+            self.assertEqual(rel, inst.a_property)
+            mock.assert_called_once()

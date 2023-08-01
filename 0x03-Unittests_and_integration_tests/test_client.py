@@ -50,3 +50,11 @@ class TestGithubOrgClient(unittest.TestCase):
             obj.public_repos()
             pmock.assert_called_once()
             mock.assert_called_once()
+
+    @parameterized.expand([
+        ({"license": {"key": "my_license"}}, "my_license"),
+        ({"license": {"key": "other_license"}}, "my_license")
+    ])
+    def test_has_license(self, repo, key):
+        """Parameterizes a test with inputs"""
+        GithubOrgClient.has_license(repo, key)
